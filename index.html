@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        .chart-container {
+            max-width: 1050px;
+            max-height: 500px;
+            display: inline-block;
+            /* border: 3px solid red; */
+            /* background-color: #f3ede3; */
+            /* margin: 3px; */
+            margin-left: 100px;
+            /* auto centers the div */
+            font-family: 'Arial', 'Arial Narrow', Arial, sans-serif;
+        }
+        h1 {
+            margin-left: 0px;
+            font-size: 25px;
+        }
+
+        svg {
+            margin: 10px;
+            row-gap: 50px;
+            /* border: 2px solid purple; */
+            overflow: visible;
+        }
+
+        
+
+/* 
+        h1 {
+            border: none;
+        } */
+        .x .tick line {
+            stroke: rgba(90, 86, 86, 0.2);
+        }
+
+        .y .tick line {
+            stroke: rgba(90, 86, 86, 0.2);
+        }
+        .x .domain {
+            display: none;
+        }
+
+        .y .domain {
+            display: none;
+        }
+
+        .y .tick text {
+            font-size: 14px;
+            fill: gray;
+
+        }
+
+        .x .tick text {
+            font-size: 14px;
+            fill: gray;
+        }
+
+        .pop-up1 {
+            position: absolute; 
+            /* border: 1px solid black; */
+            border-radius: 1px;
+            line-height: 1.2;
+            width: 180px;
+            pointer-events: none;
+            background-color: white;
+            padding: 10px
+        }
+        .pop-up2 {
+            position: absolute; 
+            /* border: 1px solid black; */
+            border-radius: 1px;
+            line-height: 1.2;
+            width: 180px;
+            pointer-events: none;
+            background-color: white;
+            padding: 10px
+        }
+        .grid-example {
+            display: grid;
+            grid-template-columns: 600px; 
+            /* how big each column should be, two numbers means 2 rows */
+            grid-template-rows: 80px;
+            /* how big is the vertical distance */
+            row-gap: 100px;
+            column-gap: 100px;
+        }
+        img {
+            width: 100%;
+            /* make the svg fits the container */
+        }
+        .key {
+  font: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.key path {
+  display: none;
+}
+
+.key line {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+.source {
+            max-width: 1000px;
+            margin:  0 auto;
+            font-size: 12px;
+        }
+
+        .annotation {
+            position: absolute; 
+            font-size:15px;
+        }
+    </style>
+    <!-- add your script blocks at the end -->
+
+</head>
+
+<body>
+    <div class="chart-container">
+        
+        <h1 class="headline">
+            U.S. States Unemployment Rate Trend Analysis(2000~2020, Annual Average)
+        </h1>
+        
+        <svg id="line-chart" width="850px" height="500px">
+
+        </svg>
+        <p class="source">Source: Economic Research Service, U.S.Department of Agriculture; U.S. Bureau of Labor Statistics</p>
+        <p class="source">Notice: The chart only illustrated annually average trend, the monthly trend(e.g.rate on April,2020) was not shown above.</p>
+        
+        <div class="pop-up">
+
+        </div>
+    </div>
+    
+    
+
+    <hr>
+     <div class="chart-container">
+        <h1 class="headline">
+            Pattern 1: Unemployment Rate in U.S., 2000
+                      (County Level, Annual Average)  
+        </h1> 
+       
+        <div class="grid-example">
+            <object data="dataviz-key_2000.svg" width=300px> 
+            </object>
+        </div> 
+        <svg id="chart-2000" width="850px" height="500px">
+
+        </svg>
+        <p class="source">Source: Economic Research Service, U.S.Department of Agriculture; U.S. Bureau of Labor Statistics</p>
+       
+        <div class="pop-up1">
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="chart-container">
+        
+        <h1 class="headline">
+            Pattern 2: Unemployment Rate in U.S., 2010
+                      (County Level, Annual Average)  
+        </h1> 
+        
+        <div class="grid-example2">
+            <object data="dataviz-key_unemploy.svg" width=300px>
+                
+            </object>
+
+        </div> 
+        
+        <svg id="chart-2010" width="850px" height="500px">
+
+        </svg>
+        <p class="source">Source: Economic Research Service, U.S.Department of Agriculture; U.S. Bureau of Labor Statistics</p>
+       
+
+        <div class="pop-up2">
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="chart-container">
+        <h1 class="headline">
+            Pattern 3-1: COVID impact on Monthly Unemployment Rate Trend, US Average
+        </h1>
+
+        <svg id="line-chart2" width="850px" height="500px">
+
+        </svg>
+        <p class="source">Source: U.S. Bureau of Labor Statistics</p>
+    </div>
+
+<hr>
+    <div class="chart-container">
+        <h1 class="headline">
+            Pattern 3-2: Unemployment Rate in U.S., 2020
+                      (County Level, Annual Average)  
+        </h1> 
+        
+        <div class="grid-example2">
+            <object data="dataviz-key_2020.svg" width=300px>
+                
+            </object>
+
+        </div> 
+        
+        <svg id="chart-2020" width="850px" height="500px">
+
+        </svg>
+        <p class="source">Source: Economic Research Service, U.S.Department of Agriculture; U.S. Bureau of Labor Statistics</p>
+
+        <div class="pop-up2">
+        </div>
+    </div>
+
+    
+
+
+    
+
+</body>
+
+
+<!-- we're using d3 version 6 (the latest version) for all out work -->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+
+<!-- load topojson script -->
+<script src="https://unpkg.com/topojson@3"></script>
+
+
+<script>
+    console.log({ d3 })
+    let width = 800;
+    let height = 460;
+
+    let svg = d3.select("body")
+        .select("#line-chart")
+
+    console.log(svg)
+
+    d3.csv("state_convert.csv").then(function (data) {
+
+        data.forEach(function (row) {
+            row.Year = +row.Year
+            row.unemployment_rate = +row.unemployment_rate_per
+        })
+        console.log(data)
+
+
+        let margin = { top: 30, right: 10, bottom: 10, left: 30 };
+
+        let x = d3.scaleLinear()
+            .domain([1999,2020]) 
+            // .domain(d3.extent(data.map(function (d) { return d.income })))
+            .range([0,width])
+
+        let y = d3.scaleLinear()
+            .domain([0,0.12])
+            .range([height - margin.bottom, margin.top])
+
+        let yAxisSettings = d3.axisLeft(y) //set axis to the left
+            .ticks(5) //approx how many ticks, the function will not necesarily give you that number
+            .tickSize(-width) //size of tick lines
+            .tickFormat(d3.format(".0%")) //what format do you want https://github.com/d3/d3-format 
+            .tickPadding(5) //distance from tick labels to tick marks
+            
+
+        let xAxisSettings = d3.axisBottom(x)
+            .ticks(12)
+            .tickSize(10)
+            .tickPadding(6)
+            .tickFormat(d3.format('.0f'))
+
+
+        let bg = svg.append("rect")
+            .attr("x", margin.left)
+            .attr("y", 0)
+            .attr("width", width)
+            .attr("height", height)
+            .style("fill", "gray")
+            .style("opacity",0.1)
+
+        let xAxisTicks = svg.append("g")
+            .attr("class", "x axis") //give each axis a class
+            .call(xAxisSettings)
+            .attr("transform", `translate(0,${height - margin.bottom})`)
+
+            svg.append("text")
+            // .attr("transform", "translate("+ (width / 2)  + "," + (height + margin.bottom)+")")
+            // .style("text-anchor", "right")
+            .attr("x", 400)
+            .attr("y", 495)
+            .style("fill","rgba(90, 86, 86, 0.8")
+            .text("Years");
+
+
+        let yAxisTicks = svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxisSettings)
+            .attr("transform", `translate(${margin.left},0)`)
+
+            svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.right)
+            .attr("x",0 - (height/2))
+            .attr("dy", "em")
+            .style("text-anchor", "middle")
+            .style("fill","rgba(90, 86, 86, 0.8")
+            .text("Unemployment Rate");
+     
+
+        let line = d3.line() //define a line function
+            .defined(d => !isNaN(d.unemployment_rate_per))
+            .x(function (d) { return x(d.Year) }) //accessing date 
+            .y(function (d) { return y(d.unemployment_rate_per) }) //accesssing value 
+            .curve(d3.curveBundle)
+
+
+
+    
+
+        let popup=d3.select(".pop-up2")
+        let grouped_data = d3.group(data, d => d.county);
+
+        console.log(grouped_data)
+
+
+
+        let agencies = Array.from(grouped_data.keys())
+        //grouping lines in svg, g=grouping
+        let line_path = svg.append("g")
+        .selectAll(".line")
+        .data(grouped_data)
+        .join("path")
+        .attr("class", function(d) {
+            return "points p-" +  d[0]  //add 0 column: name
+        })
+        .attr("d", function(d) {
+            return line(d[1])  //draw line using data
+        })
+        .style("fill", "none")
+        .style("stroke", d => {
+            if(d[0] == "Average") {
+                return "rgba(90,57,71,1)"
+            } else {
+                return "rgba(101,88,151,0.62)"
+            }
+        })
+        .style("stroke-width", d => {
+            if(d[0] == "Average") {
+                return "5px"
+            } else {
+                return "2px"
+            }
+        })
+        .style("opacity", d => {
+            if(d[0] == "Average") {
+                return "2"
+            } else {
+                return "0.5"
+            }
+        })
+
+
+
+        let zeroline = svg.append("line") //we can add additional highlight lines
+            .attr("x1", x(0))
+            .attr("x2", x(0))
+            .attr("y1", 0)
+            .attr("y2", height)
+            .style("stroke", "rgba(250,200,100,1)")
+            .style("stroke-width", "3")
+            .style("opacity", .3)
+
+            line_path.on("mouseover", (event,d) => {
+            console.log(event)
+        
+            line_path
+                .select(".p-" + d[0]) 
+                  .style("stroke", "white")
+                  .style("stroke-width", .5)
+                //   .style("fill", "orange")
+                  .transition()
+                  .duration(200)
+                //   .style("fill",function (d) { return color(d.properties.Unin_children)})
+                //   .style("opacity", .5)
+                  
+                svg.select(".p-" + d[0])
+                  .style("fill", "none")
+                  .style("stroke", d => {
+            if(d[0] == "Average") {
+                return "maroon"
+            } else {
+                return "blue"
+            }
+        })
+                   .style("stroke-width", d => {
+            if(d[0] == "Average") {
+                return "6px"
+            } else {
+                return "4px"
+            }
+        })
+                
+
+
+            let reScaleLang = d3.scaleThreshold()
+                .domain([0]) //make sure to put this in brackets!
+                .range(["below", "above"])
+
+            let diff = +d.mnav3poolgcs -2
+
+            let lang =  d[0]+" State Unemployment Rate Trend"
+            // let lang = "showing"
+
+            popup
+                .style("opacity", 1)
+                .style("left", (event.x - 10) + "px")
+                .style("top", (event.y - 100) + "px")
+                .html(lang)
+        })
+
+        line_path.on("mouseout", (event, d) => {
+            line_path
+                .select(".p-" + d[0])
+                .transition()
+                .duration(200)
+                // .style("opacity", .8)
+                // .style("fill",function (d) { return color(d.properties.Unin_children)})
+                
+            svg.select(".p-" +d[0])
+                // .transition()
+                // .duration(2000)
+                // .style("stroke", "transparent")
+                
+        .style("fill", "none")
+        .style("stroke", d => {
+            if(d[0] == "Average") {
+                return "rgba(90,57,71,1)"
+            } else {
+                return "rgba(101,88,151,0.62)"
+            }
+        })
+        .style("stroke-width", d => {
+            if(d[0] == "Average") {
+                return "5px"
+            } else {
+                return "2px"
+            }
+        })
+        .style("opacity", d => {
+            if(d[0] == "Average") {
+                return "2"
+            } else {
+                return "0.5"
+            }
+        })
+        
+            popup
+                .style("opacity", 0)
+        })
+
+        let divLabel = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("In 2018, the <strong>Great Recession</strong> hit US labor market, the annual unemployment rate kept increasing and reached the highest level in 2010 (9.6%)")
+            .style("left", "240px")
+            .style("top", "87px") //works for px not random numbers
+            .style("width", "210px")
+
+        let divLabel2 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("In 2020, the <strong>COVID-19</strong> hit US labor market, the unemployment rate rised to record high in April 2020 (14.8%), but decreased gradually afterwards, resulting in an <strong>annual average rate of 8.1%</strong>")
+            .style("left", "670px")
+            .style("top", "87px") //works for px not random numbers
+            .style("width", "200px")
+
+            svg.append("text")
+            .attr("class", "label")
+            .attr("x", 90)
+            .attr("y", 150)
+            .text("US Annual Average")
+            .style("fill", "maroon")
+            .style("font-size", "20px")
+
+            svg.append("text")
+            .attr("class", "label")
+            .attr("x", 400)
+            .attr("y", 78)
+            .text("9.6%")
+            .style("fill", "maroon")
+            .style("font-size", "20px")
+
+            svg.append("text")
+            .attr("class", "label")
+            .attr("x", 710)
+            .attr("y", 155)
+            .text("8.1%")
+            .style("fill", "maroon")
+            .style("font-size", "20px")
+
+            svg.append("line")
+            // .attr("class", "line")
+            .attr("x1", 150)
+            .attr("y1", 160)
+            .attr("x2", 150)
+            .attr("y2", 250)
+            .style("stroke", "maroon")
+            .style("stroke-width", 2)
+
+            svg.append("line")
+            // .attr("class", "line")
+            .attr("x1", 755)
+            .attr("y1", 150)
+            .attr("x2", 800)
+            .attr("y2", 165)
+            .style("stroke", "maroon")
+            .style("stroke-width", 2)
+
+            svg.append("line")
+            // .attr("class", "line")
+            .attr("x1", 418)
+            .attr("y1", 80)
+            .attr("x2", 418)
+            .attr("y2", 120)
+            .style("stroke", "maroon")
+            .style("stroke-width", 2)
+
+            svg.append("text")
+            .attr("class", "label")
+            .attr("x", 345)
+            .attr("y", 420)
+            .text("The Great")
+            .style("fill", "maroon")
+            .style("font-size", "15px")
+
+            svg.append("text")
+            .attr("class", "label")
+            .attr("x", 345)
+            .attr("y", 440)
+            .text("Recession")
+            .style("fill", "maroon")
+            .style("font-size", "15px")
+
+            svg.append("text")
+            .attr("class", "label")
+            .attr("x", 750)
+            .attr("y", 420)
+            .text("Covid-19")
+            .style("fill", "maroon")
+            .style("font-size", "15px")
+
+            svg.append("text")
+            .attr("class", "label")
+            .attr("x", 750)
+            .attr("y", 440)
+            .text("Pandemic")
+            .style("fill", "maroon")
+            .style("font-size", "15px")
+
+            svg.append("circle").attr("cx",418).attr("cy",120).attr("r", 6).style("fill", "#FDD835")
+            svg.append("circle").attr("cx",800).attr("cy",165).attr("r", 6).style("fill", "#FDD835")
+
+        })
+
+        var redBox = svg.append("rect")
+    .attr("x", 343)
+    .attr("y", 0)
+    .attr("width", 76 )
+    .attr("height", height)
+    .attr("fill", "purple")
+    .attr("opacity", 0.1);
+
+    var redBox2 = svg.append("rect")
+    .attr("x", 760)
+    .attr("y", 0)
+    .attr("width", 40 )
+    .attr("height", height)
+    .attr("fill", "purple")
+    .attr("opacity", 0.1);
+    
+    console.log({ d3 })
+    //https://observablehq.com/@mbostock/global-temperature-trends
+
+    //cool tricks for javascript arrays
+    //objects
+    //look up tables
+    //looping, or for each
+
+    // let width = 800;
+    // let height = 500;
+
+    let svg2 = d3.select("body")
+        .select("#line-chart2")
+
+    console.log(svg2)
+
+
+    //console.log
+
+    //arrays
+    //objects
+    //functions
+
+    d3.csv("data2020.csv").then(function (data) {
+
+        //when temp is loaded, then pass data into this block
+        //all references to the data need to be in this block
+
+        //d3.csv is part of a suite of other functions that can do json, xml, tsv too.  
+        //https://github.com/d3/d3-fetch
+
+
+        data.forEach(function (row) {
+            row.date = new Date( row.date )
+            row.rate = +row.rate
+        })
+
+        
+
+        console.log(data)
+
+
+        let margin = { top: 30, right: 10, bottom: 10, left: 30 };
+
+        //d3 scales for the x and y axis
+        //domain takes the data we have and maps them into SVG space
+        //in this case we need to use scaleTime because we're dealin time data
+        let x = d3.scaleTime()
+            .domain([new Date("2019-12-1 00:00:00"), new Date("2021-04-01 00:00:00")])
+            // .domain(d3.extent(data.map(function (d) { return d.date }))) //d3 extent
+            .range([margin.left, width - margin.right])
+
+            // nonleapyear.range([0, 1]).invert(0.5)
+
+            
+
+        //in this case we need to use scaleLinear because we're dealin linear data
+        let y = d3.scaleLinear()
+            .domain([0,0.16]) 
+            .range([height - margin.bottom, margin.top])
+
+
+        //define the settings for our axes
+        //https://github.com/d3/d3-axis
+        let yAxisSettings = d3.axisLeft(y) //set axis to the left
+            .ticks(5) //approx how many ticks, the function will not necesarily give you that number
+            .tickSize(-width) //size of tick lines
+            .tickFormat(d3.format(".0%")) //what format do you want https://github.com/d3/d3-format 
+            .tickPadding(10) //distance from tick labels to tick marks
+
+
+        let xAxisSettings = d3.axisBottom(x)
+            .ticks(6)
+            .tickSize(6)
+            .tickPadding(10)
+            .tickFormat(d3.timeFormat("%m/%d/%Y"))
+
+        let bg = svg2.append("rect")
+            .attr("x", margin.left)
+            .attr("y", 0)
+            .attr("width", width)
+            .attr("height", height)
+            .style("fill", "rgba(0,0,0,.04)")
+
+        //adding to the axes to our chart
+        let xAxisTicks = svg2.append("g")
+            .attr("class", "x axis") //give each axis a class
+            .call(xAxisSettings)
+            .attr("transform", `translate(0,${height - margin.bottom})`)
+
+
+        let yAxisTicks = svg2.append("g")
+            .attr("class", "y axis")
+            .call(yAxisSettings)
+            .attr("transform", `translate(${margin.left},0)`)
+
+        let line = d3.line() //define a line function
+            .defined(d => !isNaN(d.rate))
+            .x(function (d) { return x(d.date) }) //accessing date 
+            .y(function (d) { return y(d.rate) }) //accesssing value 
+
+        // //neat trick https://observablehq.com/@d3/line-with-missing-data
+
+        let line_path = svg2.append("path") //Add a grouping element. It's useful to organize svg elements. https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g
+            .attr("class", "line") // Give circles a class name.
+            .attr("d", line(data))
+            .style("fill", "none")
+            .style("stroke", "purple")
+            .style("stroke-width", 1.8)
+
+        let divLabel4 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("<strong>At the beginning of 2020</strong>, the monthly average unemployment rate of US fluctuated around <strong>4%</strong>.")
+            .style("left", "150px")
+            .style("top", "2460px") //works for px not random numbers
+            .style("width", "180px")
+
+        let divLabel7 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("In April 2020, under the impact of COVID-19 pandemic, the unemployment rate rapidly rised to <strong>14.8%</strong>  ")
+            .style("left", "180px")
+            .style("top", "2110px") //works for px not random numbers
+            .style("width", "170px")
+
+        let divLabel5 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("After April 2020, the unemployment rate went down gradually as economy recovered from COVID-19 pandemic. ")
+            .style("left", "430px")
+            .style("top", "2200px") //works for px not random numbers
+            .style("width", "260px")
+        let divLabel6 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("In April 2021, the unemployment rate had went down to <strong>6.1%</strong>, which was still higher than the level of the beggining of 2020 (4%) ")
+            .style("left", "680px")
+            .style("top", "2300px") //works for px not random numbers
+            .style("width", "260px")
+
+        var redBox2 = svg2.append("rect")
+    .attr("x", 172)
+    .attr("y", 0)
+    .attr("width", 50 )
+    .attr("height", height)
+    .attr("fill", "purple")
+    .attr("opacity", 0.1);
+
+    svg2.append("circle").attr("cx",222).attr("cy",63).attr("r", 6).style("fill", "#FDD835")
+
+    svg2.append("circle").attr("cx",790).attr("cy",290).attr("r", 6).style("fill", "#FDD835")
+    svg2.append("text")
+            .attr("class", "label")
+            .attr("x", 160)
+            .attr("y", 450)
+            .text("COVID Hit")
+            .style("fill", "purple")
+            .style("font-size", "15px")
+
+        svg2.append("text")
+            .attr("class", "label")
+            .attr("x", 220)
+            .attr("y", 55)
+            .text("14.8%")
+            .style("fill", "purple")
+            .style("font-size", "15px")
+
+            svg2.append("text")
+            .attr("class", "label")
+            .attr("x", 780)
+            .attr("y", 280)
+            .text("6.1%")
+            .style("fill", "purple")
+            .style("font-size", "15px")
+    
+
+
+
+
+
+
+    })
+
+</script>
+
+
+
+<script>
+    console.log({ d3 })
+    console.log({ topojson })
+    
+    
+
+        // //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+        Promise.all([ //waits for all the data to load, then when loaded will return it all in one array called res
+        d3.json('county_2020.json'),
+    ])
+        .then(ready)
+        .catch((err) => {
+            console.log(err);
+        });
+
+        
+        // let chart2010 = d3.select("body").select("#chart-2010")
+
+        let chart2000 = d3.select("body").select("#chart-2000")
+             // let svg = d3.select("body").select("svg")
+
+          
+    function ready(res) {
+        console.log(res[0])
+        let raw = res[0]
+
+        let county = topojson.feature(raw, raw.objects.county);
+
+        let width = 800;
+        let height = 460;
+
+        console.log(county)  
+
+    //     var redBox3 = chart2000.append("rect")
+    // .attr("x", 0)
+    // .attr("y", 0)
+    // .attr("width", 800 )
+    // .attr("height", height+20)
+    // .attr("fill", "gray")
+    // .attr("opacity", 0.1);
+
+    
+
+
+        let myProjection = d3.geoAlbersUsa()
+            .fitSize([width, height], county)
+
+
+
+        //path function
+        let path = d3.geoPath()
+            .projection(myProjection)
+
+        // let innerlines = topojson.mesh(raw, raw.objects.state, function (a, b) {
+        //     return a != b;
+        // });
+
+        let color = d3.scaleQuantile()
+            .domain([2,4,6,8,10])
+            // .domain([0,d3.max(county, function (d) { return d.properties.Unin_children })])
+            .range(d3.schemePurples[5])
+
+        
+
+
+        
+        // let svg2 = d3.select("body").select("svg")
+        
+
+        let popup1=d3.select(".pop-up1")
+            
+    
+
+
+        let counties = chart2000.append("g")
+         .selectAll(".counties")
+         .data(county.features) // Bind TopoJSON data elements
+         .enter().append("path")
+         .attr("d", path)
+         .style("fill", function (d) { return color(d.properties.Unemployment_rate_2000)})
+         .attr("class", function (d) { return "counties p-" + d.properties.GEOID}) 
+         .style("stroke", "black")
+         .style("stroke-width", .5)
+        //  .style("stroke-opacity", .5)
+        //  .on("mouseover", mouseOver )
+        //  .on("mouseleave", mouseLeave )
+
+
+
+         counties.on("mouseover", (event,d) => {
+            console.log(event)
+        
+                counties
+                .select(".p-" + d.properties.GEOID) 
+                  .style("stroke", "black")
+                  .style("stroke-width", .5)
+                //   .style("fill", "orange")
+                  .transition()
+                  .duration(200)
+                //   .style("fill",function (d) { return color(d.properties.Unin_children)})
+                //   .style("opacity", .5)
+                  
+                chart2000.select(".p-" + d.properties.GEOID)
+                  .style("fill","orange")
+                //   .transition()
+                //   .duration(200)
+                //   .style("opacity", 1)
+                  .style("stroke", "black")
+                //   .raise()
+
+
+            let reScaleLang = d3.scaleThreshold()
+                .domain([0]) //make sure to put this in brackets!
+                .range(["below", "above"])
+
+            let diff = +d.mnav3poolgcs -2
+
+            let lang = "In " + d.properties.county + ": " 
+            lang +=  d.properties.Unemployment_rate_2000 + " % people was unemployed in 2000"
+
+            popup1
+                .style("opacity", 1)
+                .style("left", (event.x - 10) + "px")
+                .style("top", (event.y + 360) + "px")
+                .html(lang)
+        })
+
+        counties.on("mouseout", (event, d) => {
+            // console.log(event)
+            counties
+                .select(".p-" + d.properties.GEOID )
+                .transition()
+                .duration(200)
+                // .style("opacity", .8)
+                // .style("fill",function (d) { return color(d.properties.Unin_children)})
+                
+                chart2000.select(".p-" + d.properties.GEOID)
+                // .transition()
+                // .duration(2000)
+                // .style("stroke", "transparent")
+                .style("fill",function (d) { return color(d.properties.Unemployment_rate_2000)})
+                .style("stroke", "black")
+            popup1
+                .style("opacity", 0)
+                
+
+
+        })
+        let divLabel2 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("In 2000, the unemployment rate in the US counties were overall modest. <strong>Only 10% of the counties had unemployment rates higher than 6.9%.</strong> Most of the counties with high unemployment rates concentrated in the western and southern states, including Washington, Oregon, California, Alaska, Mississippi, etc.")
+            .style("left", "420px")
+            .style("top", "705px") //works for px not random numbers
+            .style("width", "580px")
+
+
+        }
+
+     </script>
+
+        <script>
+    console.log({ d3 })
+    console.log({ topojson })
+    
+
+    // let margin = { top: 200, right: 0, bottom: 30, left: 0 };
+
+        // //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+        Promise.all([ //waits for all the data to load, then when loaded will return it all in one array called res
+        d3.json('county_2020.json'),
+    ])
+        .then(ready)
+        .catch((err) => {
+            console.log(err);
+        });
+        let chart2010 = d3.select("body").select("#chart-2010")
+    function ready(res2) {
+        console.log(res2[0])
+        let raw = res2[0]
+
+        let county2 = topojson.feature(raw, raw.objects.county);
+
+        let width = 800;
+        let height = 460;
+
+        console.log(county2)
+
+
+        // let svg = d3.select("body").select("svg")
+
+        let myProjection = d3.geoAlbersUsa()
+            .fitSize([width, height], county2)
+
+
+
+        //path function
+        let path = d3.geoPath()
+            .projection(myProjection)
+
+        // let innerlines = topojson.mesh(raw, raw.objects.state, function (a, b) {
+        //     return a != b;
+        // });
+
+        let color = d3.scaleQuantile()
+            .domain([2,4,6,8,10])
+            // .domain([0,d3.max(county, function (d) { return d.properties.Unin_children })])
+            .range(d3.schemePurples[5])
+
+    
+            
+        // let svg2 = d3.select("body").select("svg")
+
+        let popup2=d3.select(".pop-up2")
+        
+
+            
+        let counties2= chart2010.append("g")
+         .selectAll(".counties2")
+         .data(county2.features) // Bind TopoJSON data elements
+         .enter().append("path")
+         .attr("d", path)
+         .style("fill", function (d) { return color(d.properties.Unemployment_rate_2010)})
+         .attr("class", function (d) { return "counties2 p-" + d.properties.GEOID}) 
+         .style("stroke", "black")
+         .style("stroke-width", .5)
+
+
+
+         counties2.on("mouseover", (event2,d) => {
+            console.log(event2)
+        
+                counties2
+                // .selectAll(".counties2") 
+                .select(".p-" + d.properties.GEOID) 
+                  .style("stroke", "black")
+                  .style("stroke-width", .5)
+                //   .style("fill", "orange")
+                  .transition()
+                  .duration(200)
+                //   .style("fill",function (d) { return color(d.properties.Unin_children)})
+                //   .style("opacity", .5)
+                  
+                chart2010.select(".p-" + d.properties.GEOID)
+                  .style("fill","red")
+                //   .transition()
+                //   .duration(200)
+                //   .style("opacity", 1)
+                  .style("stroke", "black")
+                //   .raise()
+
+
+            let reScaleLang = d3.scaleThreshold()
+                .domain([0]) //make sure to put this in brackets!
+                .range(["below", "above"])
+
+            let diff = +d.mnav3poolgcs -2
+
+            let lang = "In " + d.properties.county + ": " 
+            lang +=  d.properties.Unemployment_rate_2010 + " % people was unemployed in 2010"
+
+            popup2
+                .style("opacity", 1)
+                .style("left", (event2.x ) + "px")
+                .style("top", (event2.y+ 1080 ) + "px")
+                .html(lang)
+        })
+
+        counties2.on("mouseout", (event2, d) => {
+            console.log(event2)
+            counties2
+                .select(".p-" + d.properties.GEOID )
+                .transition()
+                .duration(200)
+                // .style("opacity", .8)
+                // .style("fill",function (d) { return color(d.properties.Unin_children)})
+                
+                chart2010.select(".p-" + d.properties.GEOID)
+                // .transition()
+                // .duration(2000)
+                // .style("stroke", "transparent")
+                .style("fill",function (d) { return color(d.properties.Unemployment_rate_2010)})
+                .style("stroke", "black")
+            popup2
+                .style("opacity", 0)
+                
+
+
+        })
+
+        let divLabel3 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("In 2010, under the impact of the Great Recession, the unemployment rates had rised to the highest level in 26 years. <strong>Over 40% of counties had an unemployment rate that exceeded 10%.</strong> While most of the counties had high unemployment rate(over 10%), counties in the middle and northern states had relative lower unemployment rates, including Kansas, Nebraska, South Dakota, North Dakota,etc.  ")
+            .style("left", "420px")
+            .style("top", "1400px") //works for px not random numbers
+            .style("width", "580px")
+    }
+
+    var redBox2 = svg.append("rect")
+    .attr("x", 0)
+    .attr("y", 1405)
+    .attr("width", 850 )
+    .attr("height", 500)
+    .attr("fill", "gray")
+    .attr("opacity", 0.06);
+
+
+    
+
+
+
+</script>
+
+
+<script>
+    console.log({ d3 })
+    console.log({ topojson })
+    
+    
+
+        // //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+        Promise.all([ //waits for all the data to load, then when loaded will return it all in one array called res
+        d3.json('county_2020.json'),
+    ])
+        .then(ready)
+        .catch((err) => {
+            console.log(err);
+        });
+
+        
+        // let chart2010 = d3.select("body").select("#chart-2010")
+
+        let chart2020 = d3.select("body").select("#chart-2020")
+             // let svg = d3.select("body").select("svg")
+    
+    function ready(res) {
+        console.log(res[0])
+        let raw = res[0]
+
+        let county = topojson.feature(raw, raw.objects.county);
+
+        let width = 800;
+        let height = 460;
+
+        console.log(county)  
+
+
+
+        let myProjection = d3.geoAlbersUsa()
+            .fitSize([width, height], county)
+
+
+
+        //path function
+        let path = d3.geoPath()
+            .projection(myProjection)
+
+        // let innerlines = topojson.mesh(raw, raw.objects.state, function (a, b) {
+        //     return a != b;
+        // });
+
+        let color = d3.scaleQuantile()
+            .domain([2,4,6,8,10])
+            // .domain([0,d3.max(county, function (d) { return d.properties.Unin_children })])
+            .range(d3.schemePurples[5])
+
+        
+
+
+        
+        // let svg2 = d3.select("body").select("svg")
+        
+
+        let popup1=d3.select(".pop-up1")
+            
+    
+
+
+        let counties = chart2020.append("g")
+         .selectAll(".counties")
+         .data(county.features) // Bind TopoJSON data elements
+         .enter().append("path")
+         .attr("d", path)
+         .style("fill", function (d) { return color(d.properties.Unemployment_rate_2020)})
+         .attr("class", function (d) { return "counties p-" + d.properties.GEOID}) 
+         .style("stroke", "black")
+         .style("stroke-width", .5)
+        //  .style("stroke-opacity", .5)
+        //  .on("mouseover", mouseOver )
+        //  .on("mouseleave", mouseLeave )
+
+
+
+         counties.on("mouseover", (event,d) => {
+            console.log(event)
+        
+                counties
+                .select(".p-" + d.properties.GEOID) 
+                  .style("stroke", "black")
+                  .style("stroke-width", .5)
+                //   .style("fill", "orange")
+                  .transition()
+                  .duration(200)
+                //   .style("fill",function (d) { return color(d.properties.Unin_children)})
+                //   .style("opacity", .5)
+                  
+                chart2020.select(".p-" + d.properties.GEOID)
+                  .style("fill","orange")
+                //   .transition()
+                //   .duration(200)
+                //   .style("opacity", 1)
+                  .style("stroke", "black")
+                //   .raise()
+
+
+            let reScaleLang = d3.scaleThreshold()
+                .domain([0]) //make sure to put this in brackets!
+                .range(["below", "above"])
+
+            let diff = +d.mnav3poolgcs -2
+
+            let lang = "In " + d.properties.county + ": " 
+            lang +=  d.properties.Unemployment_rate_2020 + " % people was unemployed in 2020"
+
+            popup1
+                .style("opacity", 1)
+                .style("left", (event.x - 10) + "px")
+                .style("top", (event.y + 2250) + "px")
+                .html(lang)
+        })
+
+        counties.on("mouseout", (event, d) => {
+            // console.log(event)
+            counties
+                .select(".p-" + d.properties.GEOID )
+                .transition()
+                .duration(200)
+                // .style("opacity", .8)
+                // .style("fill",function (d) { return color(d.properties.Unin_children)})
+                
+                chart2020.select(".p-" + d.properties.GEOID)
+                // .transition()
+                // .duration(2000)
+                // .style("stroke", "transparent")
+                .style("fill",function (d) { return color(d.properties.Unemployment_rate_2020)})
+                .style("stroke", "black")
+            popup1
+                .style("opacity", 0)
+                
+
+
+        })
+
+        let divLabel3 = d3.select(".chart-container").append("div")
+            .attr("class", "annotation")
+            .html("In 2020, under the impact of COVID-19 pandemic, the unemployment rates in the US counties had rised rapidly, but then the rates decreased gradually as the market recovered from the pandemic (Chart 3-1). <strong>Only 10% of counties had an annual average unemployment rate that exceeded 9.5%</strong>, which distributed in western and north-eastern states (Arizona, California, Michigan, West Virginia, etc.).  ")
+            .style("left", "420px")
+            .style("top", "2710px") //works for px not random numbers
+            .style("width", "580px")
+
+        }
+
+        var redBox2 = svg.append("rect")
+    .attr("x", 0)
+    .attr("y", 705)
+    .attr("width", 850 )
+    .attr("height", 500)
+    .attr("fill", "gray")
+    .attr("opacity", 0.06);
+
+    var redBox3 = svg.append("rect")
+    .attr("x", 0)
+    .attr("y", 2715)
+    .attr("width", 850 )
+    .attr("height", 500)
+    .attr("fill", "gray")
+    .attr("opacity", 0.06);
+
+     </script>
+
+
+
+
